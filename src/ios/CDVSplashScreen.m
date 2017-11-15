@@ -96,10 +96,20 @@
         topActivityIndicatorStyle = UIActivityIndicatorViewStyleGray;
     }
 
+    NSString* spinnerMarginLeftPercentageSetting = [self.commandDelegate.settings objectForKey:[@"SpinnerMarginLeftPercentage" lowercaseString]];
+    NSString* spinnerMarginTopPercentageSetting = [self.commandDelegate.settings objectForKey:[@"SpinnerMarginTopPercentage" lowercaseString]];
+    
+    double spinnerMarginLeftPercentage = (spinnerMarginLeftPercentageSetting != nil) ? [spinnerMarginLeftPercentageSetting doubleValue] : 0;
+    double spinnerMarginTopPercentage = (spinnerMarginTopPercentageSetting != nil) ? [spinnerMarginTopPercentageSetting doubleValue] : 0;
+    
     UIView* parentView = self.viewController.view;
     parentView.userInteractionEnabled = NO;  // disable user interaction while splashscreen is shown
+
+    double centerX = parentView.bounds.size.width / 2 + (parentView.bounds.size.width / 100 * spinnerMarginLeftPercentage) / 2;
+    double centerY = parentView.bounds.size.height / 2 + (parentView.bounds.size.height / 100 * spinnerMarginTopPercentage) / 2;
+    
     _activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:topActivityIndicatorStyle];
-    _activityView.center = CGPointMake(parentView.bounds.size.width / 2, parentView.bounds.size.height / 2);
+    _activityView.center = CGPointMake(centerX, centerY);
     _activityView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin
         | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
     [_activityView startAnimating];
